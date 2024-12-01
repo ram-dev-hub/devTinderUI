@@ -1,0 +1,21 @@
+{
+  "name": "devtinder-back",
+  "version": "1.0.0",
+  "description": "devtinder",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"nodemon src/app"
+  },
+  "keywords": [
+    "nodejs",
+    "javascript",
+    "expressjs",
+    "backend"
+  ],
+  "author": "Ram",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
