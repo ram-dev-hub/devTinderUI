@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev":"nodemon src/app"
+    "dev": "nodemon src/app"
   },
   "keywords": [
     "nodejs",
@@ -16,6 +16,7 @@
   "author": "Ram",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "mongoose": "^8.8.4"
   }
 }
