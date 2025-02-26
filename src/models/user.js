@@ -12,14 +12,20 @@ const UserSchema=mangooseDB.Schema({
         type:String,
         unique:true
     },
+    password:{
+        type:String        
+    },
     age:{
         type:Number
+    },
+    gender:{
+        type:String
     },
     password:{
         type:String
     },
 })
-const userModel=mangooseDB.model('userModel',UserSchema)
+
 module.exports={
-    User:userModel
+    User:mangooseDB.model('User',UserSchema)
 }
