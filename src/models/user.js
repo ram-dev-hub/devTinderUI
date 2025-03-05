@@ -1,29 +1,46 @@
 
 const mangooseDB=require('mongoose')
+const validate=require('validator')
 const UserSchema=mangooseDB.Schema({
     firstName:{
         type:String,
         required:true
     },
     lastName:{
-        type:String
+        type:String,
     },
     email:{
         type:String,
-        unique:true
-    },
-    password:{
-        type:String        
-    },
+        unique:true,
+        validate(value){
+            if(!validate.isEmail(value))
+            {
+                throw new Error('Email is invalid')
+            }
+        }  
+    },   
     age:{
-        type:Number
+        type:Number,
+        min:16,
     },
     gender:{
-        type:String
+        type:String,
+        enum:{
+            values:['Male','Female','Others'],
+            message:'{VALUE} is not supported'
+        }
     },
     password:{
-        type:String
+        type:String,
+        minlength:8,
+        
     },
+    skills:{
+        type:Array
+    },
+    
+},{
+    timestampz:true
 })
 
 module.exports={

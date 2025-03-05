@@ -2,9 +2,13 @@ const express=require('express');
 const {authentication}=require("./middleware/auth")
 const {connectdataBase}=require('./database');
 const { User } = require('./models/User');
+const bcrypt=require('bcrypt');
+const jwt=require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 const app=express();
 
 app.use(express.json());
+app.use(cookieParser());
 // app.use(express.urlencoded({extended:true}));
 // app.use(express.static('public'));
 // app.use(express.static('images'));
@@ -33,17 +37,50 @@ connectdataBase().then(()=>{
 
 app.post("/signup",authentication,async(req,res)=>{
     const _user=req.body;
-    console.log(req);
     const userData=new User(req.body);
+    console.log(userData);
+    userData.password= await bcrypt.hash(req.body.password,10);
    try{
     await userData.save();
-   res.send("make get call");
+   res.send("Save user successfully");
    }
    catch(e)
    {
        res.status(500).send(e);  
-   }
-    
+   }    
+   
+})
+
+
+
+app.post("/login",authentication,async(req,res)=>{
+    try{
+    const userData=new User(req.body);
+    console.log(userData);
+
+const user=await User.findOne({email:req.body.email});
+console.log(user);
+if(!user)
+{    
+     res.send('Email id is missing');
+}
+const isValidate= await bcrypt.compare(req.body.password,user.password);
+console.log(isValidate);
+if(isValidate)
+{
+const token=await jwt.sign({_id:user._id},'devTinder@1626')
+
+console.log(token);
+res.cookie('jwt',token);
+ res.send('login successfully');
+
+}  
+}
+   catch(e)
+   {
+    console.log(e);
+       res.status(500).send(e);  
+   }    
    
 })
 
@@ -60,6 +97,25 @@ app.get("/user",authentication,async(req,res)=>{
    
 })
 
+app.get("/profile",authentication,async(req,res)=>{
+    
+    try{
+    
+      const isValidate=  await jwt.verify(req.cookies.jwt,'devTinder@1626')
+        console.log(isValidate);
+        const data=await User.findOne({_id:isValidate._id});
+
+     res.send(data);
+    }
+    catch(e)
+    {
+        res.status(500).send(e);  
+    }    
+    
+ })
+
+
+
 app.get("/userAll",authentication,async(req,res)=>{
     
     try{
@@ -74,6 +130,15 @@ app.get("/userAll",authentication,async(req,res)=>{
  })
  app.patch("/updateUser",authentication,async(req,res)=>{    
     try{
+
+        const ALLOWED_FIELDS=['firstName','lastName','email']
+        const keys=Object.keys(req.body);
+        const isValid=keys.every((key)=>ALLOWED_FIELDS.includes(key));
+        if(!isValid)
+        {
+            return res.status(400).send('Invalid fields');
+        }
+
     const data= await User.findByIdAndUpdate({_id:req.body.userId},req.body,{returnDocument:'after'});  
      res.send(data);
     }
