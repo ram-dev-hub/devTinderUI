@@ -1,6 +1,8 @@
 
 const mangooseDB=require('mongoose')
 const validate=require('validator')
+const bcrypt=require('bcrypt');
+const jwt =require('jsonwebtoken');
 const UserSchema=mangooseDB.Schema({
     firstName:{
         type:String,
@@ -8,6 +10,9 @@ const UserSchema=mangooseDB.Schema({
     },
     lastName:{
         type:String,
+    },
+    aboutUs:{
+        type:String
     },
     email:{
         type:String,
@@ -38,10 +43,23 @@ const UserSchema=mangooseDB.Schema({
     skills:{
         type:Array
     },
+    imageUrl:{
+        type:String
+    },
     
 },{
-    timestampz:true
+    timestamps:true
 })
+
+UserSchema.methods.VarifyPassword=async function(passwordbyInput){
+ return await bcrypt.compare(passwordbyInput,this.password);
+   
+}
+
+UserSchema.methods.generateToken=async function (){
+    return await jwt.sign({_id:this._id},'devTinder@1626',{expiresIn:'1d'});
+
+}
 
 module.exports={
     User:mangooseDB.model('User',UserSchema)
