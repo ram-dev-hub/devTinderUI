@@ -25,13 +25,8 @@ const userSlice = createSlice({
             state.age = action.payload.age;
             state.imageUrl = action.payload.imageUrl;
         },
-        removeUser: (state) => {
-            state.email = '';
-            state.firstName = '';
-            state.lastName ='';
-            state.aboutUs = '';
-            state.age = 10;
-            state.imageUrl = '';
+        removeUser: () => {
+           return initialState; // Resetting the state to initial state
         },
     },
 });

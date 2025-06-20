@@ -9,7 +9,6 @@ const user = useSelector((state: { user: UserState }) => state.user);
 const navigate = useNavigate();
 const dispatch=useDispatch();
 const logout = () => {  
-
   axios.post('http://localhost:7200/logout', {}, { withCredentials: true })
     .then((res) => {
       dispatch(removeUser());

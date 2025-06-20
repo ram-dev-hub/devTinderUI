@@ -1,11 +1,34 @@
 import React from 'react'
 import  type {UserState } from '../store/UserState';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeRequest, setRequests } from '../store/requestSlicer';
+import { removefeedUser } from '../store/feedSlicer';
 
 interface CardProps {
   user: any;
+  isfeed?: boolean;
 }
 
-const Card: React.FC<CardProps> = ({ user }) => {
+const Card: React.FC<CardProps> = ({ user,isfeed=false }) => {
+      const dispatch = useDispatch();
+  
+
+  const onClicksend= async (_status: string, _id: string) => {
+    try {
+        const response = await axios.post('http://localhost:7200/request/send/' + _status + '/' + _id, {}, {
+            withCredentials: true
+        });
+        if (response) {
+            dispatch(removefeedUser(_id));            
+        } else {
+            console.error('Failed to accept request:', response);
+        }
+    } catch (error) {
+        console.error('There has been a problem with your accept operation:', error);
+    }
+}
+
   return (
     <div className="relative w-80 h-[480px] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col justify-end">
       <img
@@ -20,14 +43,15 @@ const Card: React.FC<CardProps> = ({ user }) => {
       <p className="text-pink-300 text-base font-medium mb-1 drop-shadow">{user.gender}</p>
       <p className="text-white text-base font-medium mb-2 line-clamp-2 drop-shadow">{user.aboutUs}</p>
       <p className="text-cyan-200 text-sm font-semibold mb-4 drop-shadow">{user.skills}</p>
-      <div className="flex justify-center gap-6">
-        <button className="btn btn-circle bg-red-500 border-none hover:bg-red-600 text-white text-2xl shadow-xl">
-        <span role="img" aria-label="Reject">✖️</span>
-        </button>
-        <button className="btn btn-circle bg-green-500 border-none hover:bg-green-600 text-white text-2xl shadow-xl">
-        <span role="img" aria-label="Interest">❤️</span>
-        </button>
-      </div>
+        {isfeed && <div className="flex justify-center gap-6">
+          <button onClick={()=>onClicksend('interested',user._id)} className="btn btn-circle bg-red-500 border-none hover:bg-red-600 text-white text-2xl shadow-xl">
+            <span role="img" aria-label="Reject">✖️</span>
+          </button>
+          <button onClick={()=>onClicksend('ignored',user._id)} className="btn btn-circle bg-green-500 border-none hover:bg-green-600 text-white text-2xl shadow-xl">
+            <span role="img" aria-label="Interest">❤️</span>
+          </button>
+        </div>
+        }
     </div>
     </div>
   )
