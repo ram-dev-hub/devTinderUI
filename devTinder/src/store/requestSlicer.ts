@@ -5,6 +5,7 @@ name: 'request',
 initialState: [] as any[], // Assuming requests are an array of objects
 reducers:{
     setRequests: (state, action) => {
+        console.log(state);
         return action.payload;
     },
     removeRequest: (state, action) => {

@@ -11,6 +11,7 @@ const dispatch=useDispatch();
 const logout = () => {  
   axios.post('http://localhost:7200/logout', {}, { withCredentials: true })
     .then((res) => {
+      console.log('Logout successful:', res);
       dispatch(removeUser());
       navigate('/login');
     })  

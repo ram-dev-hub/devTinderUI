@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import Card from './card'
 import axios from 'axios'
 import { setFeed } from '../store/feedSlicer' 
@@ -14,7 +14,7 @@ const Feed = () => {
     axios.get('http://localhost:7200/user/feeds',{withCredentials:true}).then((res)=>{
       dispatch(setFeed(res.data.feedUsers));
     }).catch((err)=>{
-  
+  console.log(err);
       })    
   }
   useEffect(() => {

@@ -5,6 +5,7 @@ const connectionSlice=createSlice({
     initialState: [] as any[], // Assuming connections are an array of objects
     reducers: {
         setConnections: (state, action) => {
+            console.log(state);
             return action.payload;
         },      
         removeConnection: (state, action) => {

@@ -1,8 +1,6 @@
 import React from 'react'
-import  type {UserState } from '../store/UserState';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { removeRequest, setRequests } from '../store/requestSlicer';
+import { useDispatch } from 'react-redux';
 import { removefeedUser } from '../store/feedSlicer';
 
 interface CardProps {

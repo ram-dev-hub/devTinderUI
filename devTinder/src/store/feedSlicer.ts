@@ -8,6 +8,7 @@ const feedSlice = createSlice({
     reducers:{
         setFeed:(state,action)=>
         {
+            console.log(state);
             return action.payload;
         },
         removefeedUser:(state, action) => {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import NavBar from './nav-bar'
 import Footer from './footer'
 import { Outlet, useNavigate } from 'react-router-dom'
@@ -21,7 +21,7 @@ const Body = () => {
 
         }).catch((err) => {        
      
-        
+        console.log(err)
             navigate('/login');
         })
     }
